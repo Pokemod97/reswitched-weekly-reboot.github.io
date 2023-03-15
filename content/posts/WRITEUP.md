@@ -52,7 +52,7 @@ One noteworthy aspect of this, at least here, is that Ghidra mistakenly types th
 
 
 
-{{ collapse(value="(show 5.c)", path="/assets/code/3ds-ctf/reverse_start/5.c.md") }}
+{{ embedcode(path="/assets/code/3ds-ctf/reverse_start/5.c.md") }}
 ## Executable mapping?
 The next major failure creating this challenge was here. The other "key intersection" is a bit further down:
 
@@ -83,7 +83,7 @@ Here's what that block looks like in the source code:
 ## The Main Loop
 The main loop of the program is another subtle mistake, meant to be trivial to understand but in reality frustrating. 
 
-{{ collapse(value="(show 1.c)", path="/assets/code/3ds-ctf/reverse_main_loop/1.c.md") }}
+{{ embedcode( path="/assets/code/3ds-ctf/reverse_main_loop/1.c.md") }}
 
 One thing we are able to see is that somehow, if the loop exits correctly, ``local_5c`` must contain the output flag. But what's all the rest?
 
@@ -101,7 +101,7 @@ Let's review what we've learned so far:
 
 *So our flag is inside executable code in ``file.bin``!* Let's disassemble that file...
 
-{{ collapse(value="(show obfuscated.s)", path="/assets/code/3ds-ctf/Reverse_Deobfuscated_Code_File/obfuscated.s.md") }}
+{{ small(path="/assets/code/3ds-ctf/Reverse_Deobfuscated_Code_File/obfuscated.s.md") }}
 Aw, nuts.
 
 It couldn't be that easy, right? After the accidentally substantial reverse engineering effort, we're confronted with a bizarre puzzle. Somewhere along the line, this apparently executable code was transformed from gibberish into properly functioning code that will spit out our flag.
@@ -190,12 +190,12 @@ That's right, in addition to supporting tiling, the 3DS hardware supports **inve
 
 ## Climbing the Summit
 The reverse engineering nightmare overcome, the inscrutable DMA function understood and the obfuscated code un-scrambled, now at last the end is in sight...
-{{ collapse(value="(show 1.c)", path="/assets/code/3ds-ctf/Reverse_Deobfuscated_Code_File/1.c.md") }}
+{{ embedcode(path="/assets/code/3ds-ctf/Reverse_Deobfuscated_Code_File/1.c.md") }}
 
 
 Well, this is really not that complicated... ``param_2`` is obviously a state which is stored by the calling function, we've already established that ``param_1`` is ``hidKeysDown()`` and ``param_3`` is the output flag. Let's update with that...
 
-{{ collapse(value="(show 2.c)", path="/assets/code/3ds-ctf/Reverse_Deobfuscated_Code_File/2.c.md" )}}
+{{ embedcode(path="/assets/code/3ds-ctf/Reverse_Deobfuscated_Code_File/2.c.md" )}}
 
 So that ``state`` value seems to rely on the current button inputs. If you click the correct sequence of buttons, it'll spit out the flag. If you went really far and [checked the bitmask of each button](https://libctru.devkitpro.org/hid_8h.html#a2f80701c36e79c0640d91c788feee0b3aa7b3a3d0503a46bec51c6e3da95747cc), you'd find that the function is actually searching for the Konami Code...
 
